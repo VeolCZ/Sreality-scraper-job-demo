@@ -1,0 +1,16 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:xys5PM7wZVNgWnyIeUnY@containers-us-west-35.railway.app:6729/railway"
+}
+
+model flats {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  name      String
+  locality  String
+  imgUrls   String[]
+}
