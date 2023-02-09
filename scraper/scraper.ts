@@ -3,16 +3,9 @@ const puppeteer = require("puppeteer");
 const prisma = new PrismaClient()
 
 const url = "https://www.sreality.cz/hledani/prodej/byty?strana=";
-// interface result {
-//   name: string;
-//   locality: string;
-//   imgUrls: string[];
-// };
 
 const scrapePage = async (url: string) => {
-  // let results: result[] = []
-  // setup page for scraping
-  const browser = await puppeteer.launch({headless: true});
+  const browser = await puppeteer.launch({executablePath: '/usr/bin/google-chrome', args: ["--no-sandbox"]});
   const page = await browser.newPage();
   await page.goto(url, {waitUntil: "networkidle2"});
 
@@ -37,12 +30,6 @@ const scrapePage = async (url: string) => {
     const names = await page.evaluate(() => Array.from(document.querySelectorAll("span.name.ng-binding"), element => element.textContent));
     // locality
     const localities = await page.evaluate(() => Array.from(document.querySelectorAll("span.locality.ng-binding"), element => element.textContent));
-
-    // results.push({
-    //   name: names[i],
-    //   locality: localities[i],
-    //   imgUrls: imgUrls
-    // })
 
     await prisma.flats.create({
       data: {

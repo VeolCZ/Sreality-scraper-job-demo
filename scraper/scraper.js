@@ -39,16 +39,11 @@ var PrismaClient = require('@prisma/client').PrismaClient;
 var puppeteer = require("puppeteer");
 var prisma = new PrismaClient();
 var url = "https://www.sreality.cz/hledani/prodej/byty?strana=";
-// interface result {
-//   name: string;
-//   locality: string;
-//   imgUrls: string[];
-// };
 var scrapePage = function (url) { return __awaiter(_this, void 0, void 0, function () {
     var browser, page, i, imgUrls, x, element, src, imgUrl, error_1, imgUrl, names, localities;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, puppeteer.launch({ headless: true })];
+            case 0: return [4 /*yield*/, puppeteer.launch({ executablePath: '/usr/bin/google-chrome', args: ["--no-sandbox"] })];
             case 1:
                 browser = _a.sent();
                 return [4 /*yield*/, browser.newPage()];
@@ -99,11 +94,6 @@ var scrapePage = function (url) { return __awaiter(_this, void 0, void 0, functi
                 return [4 /*yield*/, page.evaluate(function () { return Array.from(document.querySelectorAll("span.locality.ng-binding"), function (element) { return element.textContent; }); })];
             case 15:
                 localities = _a.sent();
-                // results.push({
-                //   name: names[i],
-                //   locality: localities[i],
-                //   imgUrls: imgUrls
-                // })
                 return [4 /*yield*/, prisma.flats.create({
                         data: {
                             name: names[i],
@@ -112,11 +102,6 @@ var scrapePage = function (url) { return __awaiter(_this, void 0, void 0, functi
                         }
                     })];
             case 16:
-                // results.push({
-                //   name: names[i],
-                //   locality: localities[i],
-                //   imgUrls: imgUrls
-                // })
                 _a.sent();
                 _a.label = 17;
             case 17:
@@ -133,6 +118,6 @@ var scrapePage = function (url) { return __awaiter(_this, void 0, void 0, functi
     });
 }); };
 // Scraping
-for (var i = 1; i < 25; i++) {
+for (var i = 1; i < 27; i++) {
     scrapePage(url + String(i));
 }

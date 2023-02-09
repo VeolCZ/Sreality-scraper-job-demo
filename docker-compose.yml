@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  database:
+    image: 'postgres:latest'
+    container_name: postgres
+    hostname: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: flats_database
+
+  scraper:
+    image: scraper
+    ports:
+      - 5000:5000
+    depends_on:
+      - postgres
+
+  website:
+    image: website
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    depends_on:
+      - postgres
+      - scraper
